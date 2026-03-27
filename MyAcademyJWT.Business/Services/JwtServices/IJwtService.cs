@@ -1,6 +1,6 @@
-using MyAcademyJWT_Identity.Entities;
+using MyAcademyJWT.Entity.Entities;
 
-namespace MyAcademyJWT_Identity.Services.JwtServices
+namespace MyAcademyJWT.Business.Services.JwtServices
 {
     public interface IJwtService
     {

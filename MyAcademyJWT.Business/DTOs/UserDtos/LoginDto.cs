@@ -1,4 +1,4 @@
-namespace MyAcademyJWT_Identity.DTOs.UserDtos
+namespace MyAcademyJWT.Business.DTOs.UserDtos
 {
     public class LoginDto
     {

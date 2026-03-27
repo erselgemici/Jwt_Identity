@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MyAcademyJWT_Identity.Context;
-using MyAcademyJWT_Identity.Entities;
-using MyAcademyJWT_Identity.Services.JwtServices;
+using MyAcademyJWT.Business.Services;
+using MyAcademyJWT.Business.Services.JwtServices;
+using MyAcademyJWT.DataAccess.Context;
+using MyAcademyJWT.Entity.Entities;
 using System.Security.Claims;
 using System.Text;
 

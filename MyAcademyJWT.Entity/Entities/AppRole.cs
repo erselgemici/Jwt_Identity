@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace MyAcademyJWT_Identity.Entities
+namespace MyAcademyJWT.Entity.Entities
 {
     public class AppRole : IdentityRole<int>
     {

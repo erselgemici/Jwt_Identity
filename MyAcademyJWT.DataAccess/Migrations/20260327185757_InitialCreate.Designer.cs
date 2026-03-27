@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyAcademyJWT_Identity.Context;
+using MyAcademyJWT.DataAccess.Context;
 
 #nullable disable
 
-namespace MyAcademyJWT_Identity.Migrations
+namespace MyAcademyJWT.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260203173507_mig_initial")]
-    partial class mig_initial
+    [Migration("20260327185757_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,7 +128,36 @@ namespace MyAcademyJWT_Identity.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MyAcademyJWT_Identity.Entities.AppRole", b =>
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Album", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtistId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CoverImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReleaseYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.AppRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,7 +187,7 @@ namespace MyAcademyJWT_Identity.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("MyAcademyJWT_Identity.Entities.AppUser", b =>
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -194,6 +223,9 @@ namespace MyAcademyJWT_Identity.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("PackageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -223,10 +255,12 @@ namespace MyAcademyJWT_Identity.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("PackageId");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MyAcademyJWT_Identity.Entities.Category", b =>
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Artist", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,18 +268,138 @@ namespace MyAcademyJWT_Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Artists");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Package", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContentLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Packages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ContentLevel = 1,
+                            Name = "Elite"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ContentLevel = 2,
+                            Name = "Premium"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ContentLevel = 3,
+                            Name = "Gold"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ContentLevel = 4,
+                            Name = "Standard"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ContentLevel = 5,
+                            Name = "Basic"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ContentLevel = 6,
+                            Name = "Free"
+                        });
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Song", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AlbumId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AudioUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<int>("RequiredContentLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
+
+                    b.ToTable("Songs");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.UserSongHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ListenedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SongId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("UserSongHistories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("MyAcademyJWT_Identity.Entities.AppRole", null)
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -254,7 +408,7 @@ namespace MyAcademyJWT_Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("MyAcademyJWT_Identity.Entities.AppUser", null)
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -263,7 +417,7 @@ namespace MyAcademyJWT_Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("MyAcademyJWT_Identity.Entities.AppUser", null)
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -272,13 +426,13 @@ namespace MyAcademyJWT_Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("MyAcademyJWT_Identity.Entities.AppRole", null)
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyAcademyJWT_Identity.Entities.AppUser", null)
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -287,11 +441,88 @@ namespace MyAcademyJWT_Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("MyAcademyJWT_Identity.Entities.AppUser", null)
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Album", b =>
+                {
+                    b.HasOne("MyAcademyJWT.Entity.Entities.Artist", "Artist")
+                        .WithMany("Albums")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.AppUser", b =>
+                {
+                    b.HasOne("MyAcademyJWT.Entity.Entities.Package", "Package")
+                        .WithMany("Users")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Song", b =>
+                {
+                    b.HasOne("MyAcademyJWT.Entity.Entities.Album", "Album")
+                        .WithMany("Songs")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Album");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.UserSongHistory", b =>
+                {
+                    b.HasOne("MyAcademyJWT.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("SongHistories")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyAcademyJWT.Entity.Entities.Song", "Song")
+                        .WithMany("UserSongHistories")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Song");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Album", b =>
+                {
+                    b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.AppUser", b =>
+                {
+                    b.Navigation("SongHistories");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Artist", b =>
+                {
+                    b.Navigation("Albums");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Package", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("MyAcademyJWT.Entity.Entities.Song", b =>
+                {
+                    b.Navigation("UserSongHistories");
                 });
 #pragma warning restore 612, 618
         }

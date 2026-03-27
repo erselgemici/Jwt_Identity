@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyAcademyJWT_Identity.DTOs.UserDtos;
-using MyAcademyJWT_Identity.Entities;
-using MyAcademyJWT_Identity.Services.JwtServices;
-using System.Threading.Tasks;
+using MyAcademyJWT.Business.DTOs.UserDtos;
+using MyAcademyJWT.Business.Services.JwtServices;
+using MyAcademyJWT.Entity.Entities;
 
 namespace MyAcademyJWT_Identity.Controllers
 {
