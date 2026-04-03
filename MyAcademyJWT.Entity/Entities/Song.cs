@@ -7,7 +7,7 @@ namespace MyAcademyJWT.Entity.Entities
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string AudioUrl { get; set; } 
+        public long DeezerTrackId { get; set; }
         public TimeSpan Duration { get; set; } 
 
         public int RequiredContentLevel { get; set; }

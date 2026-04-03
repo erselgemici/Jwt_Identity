@@ -1,0 +1,150 @@
+@model MyAcademyJWT.WebUI.Models.Artist.ResultArtistDto
+@using MyAcademyJWT.WebUI.Models.Song
+
+@{
+    ViewData["Title"] = Model.Name + " - Profil";
+}
+
+<div class="padding sr">
+    <div class="page-hero">
+        <div class="media bg-media">
+            <div class="media-content" style="background-image:url('@Model.ImageUrl'); filter: brightness(0.6);"></div>
+        </div>
+        <div class="pos-rlt">
+            <h1 class="display-3 font-weight-bold text-white">@Model.Name</h1>
+            <div class="py-4 toolbar align-items-center">
+                <button class="btn btn-icon btn-play btn-rounded gd-primary"></button>
+                <span class="text-white ml-3" style="font-size: 1.1rem;">
+                    @ViewBag.TotalSongs Parça
+                </span>
+                <button class="btn btn-sm btn-outline-light btn-rounded mx-3" data-toggle-class>
+                    <span class="d-inline">Takip Et</span>
+                    <span class="d-none">Takip Ediliyor</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-md-flex pos-rlt mt-4">
+        <div class="flex">
+            <div class="d-flex">
+                <ul class="nav nav-sm text-sm nav-pills nav-rounded py-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#tracks" data-toggle="tab">Tüm Parçalar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#albums" data-toggle="tab">Albümler</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tracks">
+                    
+                    <div class="heading pt-5 pb-3 d-flex align-items-center">
+                        <div>
+                            <div class="text-muted sr-item">Popüler</div>
+                            <h5 class="text-highlight sr-item">Şarkılar</h5>
+                        </div>
+                        <span class="flex"></span>
+                        
+                        <form method="get" action="/Artist/Detail/@Model.Id" class="input-group" style="max-width: 250px;">
+                            <div class="input-group-prepend">
+                                <button type="submit" class="input-group-text bg-transparent border-secondary text-muted" style="border-right: none; cursor:pointer;">
+                                    <i data-feather="search"></i>
+                                </button>
+                            </div>
+                            <input type="text" name="search" value="@ViewBag.CurrentSearch" class="form-control bg-transparent border-secondary text-white" placeholder="Bu sanatçıda ara..." style="border-left: none; box-shadow: none;">
+                        </form>
+                    </div>
+                    
+                    <div class="row list-row list-index">
+                        @if (ViewBag.ArtistSongs != null && ((List<ResultSongDto>)ViewBag.ArtistSongs).Any())
+                        {
+                            foreach (var song in ViewBag.ArtistSongs as List<ResultSongDto>)
+                            {
+                                <div class="col-12 mb-2" data-id="@song.Id">
+                                    <div class="list-item r">
+                                        <div class="media">
+                                            <a href="/Home/Player?id=@song.Id" class="media-content no-ajax" style="background-image:url('@song.CoverImageUrl')"></a>
+                                            <div class="media-action media-action-overlay">
+                                                <button class="btn btn-icon no-bg no-shadow hide-row" data-toggle-class>
+                                                    <i data-feather="heart" class="active-fill"></i>
+                                                </button>
+                                                <a href="/Home/Player?id=@song.Id" class="btn btn-raised btn-icon btn-rounded bg--white btn-play no-ajax" style="display: flex; align-items: center; justify-content: center;">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#a272ff" stroke="#a272ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                                </a>
+                                                <button class="btn btn-icon no-bg no-shadow hide-row btn-more" data-toggle="dropdown">
+                                                    <i data-feather="more-horizontal"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="list-content text-center">
+                                            <div class="list-body">
+                                                <a href="/Home/Player?id=@song.Id" class="list-title title no-ajax h-1x text-white" style="font-size: 1.1rem;">
+                                                    @song.Title
+                                                </a>
+                                                <span class="list-subtitle d-block text-muted h-1x subtitle">
+                                                    @song.ArtistName
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="list-action show-row">
+                                            <div class="d-flex align-items-center">
+                                                <div class="px-3 text-sm text-muted d-none d-md-block">@song.Duration</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-12 py-5 text-center">
+                                <p class="text-muted text-lg">Bu sanatçıya ait aranılan şarkı bulunamadı.</p>
+                            </div>
+                        }
+
+                        @if (ViewBag.TotalPages > 1)
+                        {
+                            <div class="d-flex py-4 justify-content-center w-100">
+                                <ul class="pagination pagination-sm">
+            
+                                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                        <a class="page-link no-ajax" href="/Artist/Detail/@Model.Id?page=@(ViewBag.CurrentPage - 1)&search=@ViewBag.CurrentSearch">Önceki</a>
+                                    </li>
+
+                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                    {
+                                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                            <a class="page-link no-ajax" href="/Artist/Detail/@Model.Id?page=@i&search=@ViewBag.CurrentSearch">@i</a>
+                                        </li>
+                                    }
+
+                                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                        <a class="page-link no-ajax" href="/Artist/Detail/@Model.Id?page=@(ViewBag.CurrentPage + 1)&search=@ViewBag.CurrentSearch">Sonraki</a>
+                                    </li>
+            
+                                </ul>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="albums">
+                    <div class="col-12 py-5 text-center mt-5">
+                        <h4 class="text-muted">Albümler yakında eklenecek...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-item:hover {
+        background-color: rgba(255,255,255,0.05);
+        border-radius: 8px;
+    }
+</style>

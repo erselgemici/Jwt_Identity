@@ -1,0 +1,33 @@
+@model MyAcademyJWT.WebUI.Models.Song.SongPlayDto
+
+@{
+    ViewData["Title"] = "Şu An Çalıyor";
+}
+
+<div class="page-container p-5 text-center mt-5">
+    <div class="mx-auto" style="max-width: 600px; background: #1a1b1e; border-radius: 15px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <div class="mb-4">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#a272ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8"></polygon>
+            </svg>
+        </div>
+
+        <h2 class="text-white font-weight-bold mb-2">@Model.Title</h2>
+        <p class="text-muted mb-5">Bepop Müzik Platformu</p>
+
+        <div class="audio-player mt-4">
+            <audio controls autoplay style="width: 100%; outline: none; border-radius: 50px;">
+                <source src="@Model.AudioUrl" type="audio/mpeg">
+                Tarayıcınız bu ses formatını desteklemiyor.
+            </audio>
+        </div>
+
+        <div class="mt-5">
+            <a href="/Home/Index" class="btn btn-outline-light btn-rounded">
+                <i data-feather="arrow-left"></i> Ana Sayfaya Dön
+            </a>
+        </div>
+    </div>
+</div>

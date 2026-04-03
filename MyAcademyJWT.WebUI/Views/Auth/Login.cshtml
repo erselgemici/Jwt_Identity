@@ -1,0 +1,109 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr-TR" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <title>Giriş Yap | Bepop - Müzik Web Uygulaması</title>
+    <meta name="description" content="Responsive, Bootstrap, BS4" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="~/Bepop/libs/slick-carousel/slick/slick.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/libs/slick-carousel/slick/slick-theme.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/assets/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/assets/css/style.css" type="text/css" />
+</head>
+<body class="layout-row bg-dark">
+    <div class="d-flex flex-column flex">
+        <div class="row no-gutters h-100">
+            <div class="col-md-6 bg-dark bg-img" style="background-image:url('/Bepop/assets/img/b6.jpg')">
+                <div class="p-3 p-md-5 d-flex flex-column h-100" style="background: rgba(0,0,0,0.6);">
+                    <h4 class="mb-3 text-white font-weight-bold"><i data-feather="radio" class="mr-2"></i>Bepop</h4>
+                    <div class="mt-auto">
+                        <h1 class="display-4 font-weight-bold text-white mb-3">Sanatçılar için müzik platformu.</h1>
+                        <p class="text-fade lead">Dünyanın en popüler sanatçılarını bulun, müziklerini dinleyin ve topluluğa katılın.</p>
+                    </div>
+                    <div class="d-flex text-sm text-fade mt-auto pt-5">
+                        <a href="/" class="text-white">Hakkında</a>
+                        <span class="flex"></span>
+                        <a href="#" class="text-white mx-1">Şartlar</a>
+                        <a href="#" class="text-white mx-1">Gizlilik</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 d-flex align-items-center justify-content-center" id="content-body">
+                <div class="p-4 p-md-5 w-100" style="max-width: 450px;">
+                    <div class="text-center mb-5">
+                        <h3 class="font-weight-bold text-white">Hoş Geldiniz</h3>
+                        <p class="text-muted">Devam etmek için giriş yapın</p>
+                    </div>
+
+                    <form role="form" method="post" action="/Auth/Login">
+                        <div class="form-group mb-4">
+                            <label class="text-muted">Kullanıcı Adı</label>
+                            <input type="text" name="Username" class="form-control bg-dark border-secondary text-white" placeholder="Kullanıcı adınızı girin" required style="border-radius: 8px;">
+                        </div>
+                        <div class="form-group mb-4">
+                            <div class="d-flex justify-content-between">
+                                <label class="text-muted">Şifre</label>
+                                <a href="#" class="text-primary text-sm">Şifremi Unuttum?</a>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="Password" id="loginPassword" class="form-control bg-dark border-secondary text-white" placeholder="Şifreniz" required style="border-radius: 8px 0 0 8px; border-right: none;">
+                                <div class="input-group-append">
+                                    <span class="input-group-text border-secondary bg-dark cursor-pointer" onclick="togglePassword('loginPassword', 'loginEyeIcon')" style="border-radius: 0 8px 8px 0; border-left: none;">
+                                        <i data-feather="eye" id="loginEyeIcon" class="text-muted"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger" style="border-radius: 8px; padding: 10px; margin-bottom: 20px;">
+                                @Html.ValidationSummary(false, "", new { @class = "text-danger list-unstyled m-0" })
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-primary btn-block mb-4" style="background-color: #a272ff; border: none; border-radius: 8px; padding: 12px;">Giriş Yap</button>
+                        
+                        <div class="text-center text-muted mb-4 text-sm">Veya şununla devam et</div>
+                        <div class="d-flex justify-content-between mb-5">
+                            <button type="button" class="btn btn-outline-secondary flex-fill mx-1" style="border-radius: 8px;"><i data-feather="github"></i></button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill mx-1" style="border-radius: 8px;"><i data-feather="facebook"></i></button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill mx-1" style="border-radius: 8px;"><i data-feather="twitter"></i></button>
+                        </div>
+
+                        <div class="text-center">
+                            <span class="text-muted">Hesabınız yok mu?</span>
+                            <a href="/Auth/Register" class="text-primary font-weight-bold" style="color: #a272ff !important;">Kayıt Ol</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Bepop/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/Bepop/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="~/Bepop/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Bepop/libs/feather-icons/dist/feather.min.js"></script>
+    <script>
+            feather.replace();
+            function togglePassword(inputId, iconId) {
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.setAttribute("data-feather", "eye-off");
+                } else {
+                    input.type = "password";
+                    icon.setAttribute("data-feather", "eye");
+                }
+                feather.replace();
+            }
+    </script>
+</body>
+</html>

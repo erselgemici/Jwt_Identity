@@ -1,0 +1,157 @@
+@model List<MyAcademyJWT.WebUI.Models.Artist.ResultArtistDto>
+@using MyAcademyJWT.WebUI.Models.Song
+
+@{
+    ViewData["Title"] = "Sanatçılar";
+}
+
+<div class="padding sr" id="list" data-plugin="list">
+    
+    <div class="page-hero">
+        <div class="media bg-media">
+            <div class="media-content" style="background-image:url('/Bepop/assets/img/b6.jpg')"></div>
+        </div>
+        <div class="pos-rlt">
+            <h1 class="display-3 font-weight-bold text-white">@Model.Count Sanatçı</h1>
+        </div>
+    </div>
+    
+    <div class="d-lg-flex pos-rlt mt-4">
+        <div class="flex">
+            
+            <div class="pb-4 d-flex sr-item align-items-center" id="filter-tag">
+                <div class="no-shrink my-2">Ülkeler</div>
+                <div class="mx-3">
+                    <a href="#" class="btn btn-sm btn-white m-1">Tüm Ülkeler</a>
+                    <a href="#" class="btn btn-sm btn-white m-1">Türkiye</a>
+                </div>
+                <span class="flex"></span> 
+                
+                <div class="input-group" style="max-width: 250px;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent border-secondary text-muted" style="border-right: none;"><i data-feather="search"></i></span>
+                    </div>
+                    <input type="text" id="artistSearchInput" class="form-control bg-transparent border-secondary text-white" placeholder="Sanatçı Ara..." style="border-left: none; box-shadow: none;">
+                </div>
+            </div>
+            
+            <div class="row list media-circle" id="artistList">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var artist in Model)
+                    {
+                        <div class="col-4 col-sm-4 col-md-3 col-lg-3 py-3 artist-card" data-name="@artist.Name.ToLower()">
+                            <div class="list-item r">
+                                <div class="media ">
+                                    <a href="/Artist/Detail/@artist.Id" class="media-content no-ajax" style="background-image:url('@artist.ImageUrl')"></a>
+                                    <div class="media-action "></div>
+                                </div>
+                                <div class="list-content text-center mt-2">
+                                    <div class="list-body ">
+                                        <a href="/Artist/Detail/@artist.Id" class="list-subtitle d-block text-white h-1x subtitle no-ajax font-weight-bold" style="font-size: 1.1rem;">
+                                            @artist.Name
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">Sistemde henüz kayıtlı sanatçı bulunmuyor.</p>
+                    </div>
+                }
+            </div>
+            
+            <div class="d-flex py-3 justify-content-center">
+                <ul class="pagination pagination-sm"></ul>
+            </div>
+        </div>
+        
+        <div style="min-width: 4rem"></div>
+        
+        <div class="w-xl w-auto-sm no-shrink">
+            <div class="sticky">
+                
+                <div class="list mb-5">
+                    <div class="list-item list-overlay r">
+                        <div class="media ">
+                            <a href="#" class="media-content no-ajax" style="background-image:url('/Bepop/assets/img/b16.jpg')"></a>
+                            <div class="media-action "></div>
+                        </div>
+                        <div class="list-content p-5 text-center">
+                            <div class="list-body ">
+                                <a href="#" class="list-title title no-ajax h3 font-weight-bold text-white">En Çok Dinlenenler</a>
+                                <a href="#" class="list-subtitle d-block text-white h-1x subtitle no-ajax">Günün favori parçaları.</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6 class="text text-muted sr-item">Trend Parçalar</h6>
+                <div class="row list-row">
+                    
+                    @if (ViewBag.TopSongs != null)
+                    {
+                        foreach (ResultSongDto song in ViewBag.TopSongs)
+                        {
+                            <div class="col-12 mb-2">
+                                <div class="list-item r">
+                                    <div class="media ">
+                                        <a href="/Home/Player?id=@song.Id" class="media-content no-ajax" style="background-image:url('@song.CoverImageUrl')"></a>
+                                        <div class="media-action ">
+                                            <a href="/Home/Player?id=@song.Id" class="btn btn-raised btn-icon btn-rounded bg--white btn-play no-ajax" style="display: flex; align-items: center; justify-content: center;">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#a272ff" stroke="#a272ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="list-content ">
+                                        <div class="list-body ">
+                                            <a href="/Home/Player?id=@song.Id" class="list-title title no-ajax h-1x text-white">@song.Title</a>
+                                            <a href="#" class="list-subtitle d-block text-muted h-1x subtitle no-ajax">@song.ArtistName</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("artistSearchInput");
+        const artistCards = document.querySelectorAll(".artist-card");
+
+        searchInput.addEventListener("keyup", function () {
+            const filterValue = searchInput.value.toLowerCase();
+
+            artistCards.forEach(function (card) {
+                const artistName = card.getAttribute("data-name");
+                
+                if (artistName.includes(filterValue)) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .list-item .media-content {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 2px solid transparent;
+    }
+    .list-item:hover .media-content {
+        transform: scale(1.05);
+        border-color: #a272ff;
+        box-shadow: 0 10px 20px rgba(162, 114, 255, 0.3);
+    }
+</style>

@@ -24,6 +24,7 @@ namespace MyAcademyJWT.Business.Services
         {
             var claims = new List<Claim>
             {
+                new Claim("FullName", user.FullName ?? user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAcademyJWT.DataAccess", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAcademyJWT.Business", "MyAcademyJWT.Business\MyAcademyJWT.Business.csproj", "{75A2D887-3C2D-4DF2-98D4-D71960FA87FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAcademyJWT.WebUI", "MyAcademyJWT.WebUI\MyAcademyJWT.WebUI.csproj", "{15F74029-ABBD-4322-8B2B-66E30E94E5F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{75A2D887-3C2D-4DF2-98D4-D71960FA87FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75A2D887-3C2D-4DF2-98D4-D71960FA87FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75A2D887-3C2D-4DF2-98D4-D71960FA87FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15F74029-ABBD-4322-8B2B-66E30E94E5F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15F74029-ABBD-4322-8B2B-66E30E94E5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15F74029-ABBD-4322-8B2B-66E30E94E5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15F74029-ABBD-4322-8B2B-66E30E94E5F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

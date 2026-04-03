@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr-TR" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] | Bepop - Müzik Web Uygulaması</title>
+    <meta name="description" content="Responsive, Bootstrap, BS4" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  
+    <link rel="stylesheet" href="~/Bepop/libs/slick-carousel/slick/slick.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/libs/slick-carousel/slick/slick-theme.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/assets/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="~/Bepop/assets/css/style.css" type="text/css" />
+</head>
+
+<body class="layout-column bg-dark">
+    <header id="header" class="page-header fixed">
+        <div class="navbar navbar-expand-lg">
+  
+            <a href="/" class="navbar-brand text-white ">
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1" fill="#000"></circle>
+                    <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1"></circle>
+                    <g class="loading-spin" stroke="currentColor" stroke-width="1" style="transform-origin: 12px 12px">
+                        <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+                    </g>
+                </svg>
+                <span class="hidden-folded d-inline l-s-n-1x ">Bepop</span>
+            </a>
+            <div class="collapse navbar-collapse order-2 order-lg-1" id="navbarCollapse">
+                <ul class="navbar-nav" data-nav>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-text">Edin</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link no-ajax">
+                            <span class="nav-text">Dokümantasyon</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+  
+            <ul class="nav navbar-menu order-1 order-lg-2">
+       
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var userFullName = User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value ?? User.Identity.Name;
+
+                    <li class="nav-item dropdown">
+                        <a href="#" data-toggle="dropdown" class="nav-link d-flex align-items-center px-2 text-color">
+                            <span class="avatar w-24" style="margin-right: 8px;">
+                                <img src="~/Bepop/assets/img/a0.jpg" alt="...">
+                                </span>
+                                <span>Hoş geldin, <strong>@userFullName</strong></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right w mt-3 animate fadeIn">
+                                <a class="dropdown-item" href="#">Profilim</a>
+                                <a class="dropdown-item" href="#">Ayarlar</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item no-ajax" href="/Auth/Logout">Çıkış Yap</a>
+                            </div>
+                        </li>
+                    }
+                else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link no-ajax" href="/Auth/Login">
+                                Giriş Yap
+                            </a>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <a class="btn btn-rounded btn-sm btn-primary no-ajax" href="/Auth/Register">
+                                Kayıt Ol
+                            </a>
+                        </li>
+                    }
+
+                    <li class="nav-item d-lg-none">
+                        <a href="#" class="nav-link px-2" data-toggle="collapse" data-toggle-class data-target="#navbarCollapse">
+                            <i data-feather="menu"></i>
+                        </a>
+                    </li>
+                </ul>
+  
+            </div>
+        </header>
+        <div id="main" class="layout-row flex">
+            <div id="content" class="flex ">
+                @RenderBody()
+            </div>
+        </div>
+        <footer id="footer" class="page-footer ">
+        
+            <div class="padding bg-dark  b-t">
+                <div class="page-container">
+                    <div class="py-5 text-inherit text-hover-primary">
+                        <div class="row mb-5">
+                            <div class="col-6 col-md-4">
+                                <div class="mb-3">
+                                    <a href="/" class="navbar-brand text-white ">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1" fill="#000"></circle>
+                                            <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1"></circle>
+                                            <g class="loading-spin" stroke="currentColor" stroke-width="1" style="transform-origin: 12px 12px">
+                                                <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+                                            </g>
+                                        </svg>
+                                        <span class="hidden-folded d-inline l-s-n-1x ">Bepop</span>
+                                    </a>
+                                </div>
+                                <div class="px-1">
+                                    <div class="dropdown mt-5 ml-md-5">
+                                        <button class="btn w-sm btn-dark text-align-auto b-a sorting" data-toggle="dropdown">Türkçe</button>
+                                        <div class="dropdown-menu">
+                                            <a href="#" class="dropdown-item">Türkçe</a>
+                                            <a href="#" class="dropdown-item">English</a>
+                                            <a href="#" class="dropdown-item">Français</a>
+                                            <a href="#" class="dropdown-item">日本语</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <h5 class="mb-3 text-muted">Sayfalar</h5>
+                                <ul class="list-unstyled l-h-2x text-highlight">
+                                    <li><a href="#">Sanatçılar</a></li>
+                                    <li><a href="#">En İyiler</a></li>
+                                    <li><a href="#">Türler</a></li>
+                                    <li><a href="#">Hakkımızda</a></li>
+                                    <li><a href="#">Blog</a></li>
+                                    <li><a href="/Auth/Login">Giriş Yap</a></li>
+                                    <li><a href="/Auth/Register">Kayıt Ol</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <h5 class="mb-3 text-muted">Senin Bepop'un</h5>
+                                <ul class="list-unstyled l-h-2x text-highlight">
+                                    <li><a href="#">Profil</a></li>
+                                    <li><a href="#">Albümler</a></li>
+                                    <li><a href="#">Şarkılar</a></li>
+                                    <li><a href="#">Çalma Listeleri</a></li>
+                                    <li><a href="#">Beğenilenler</a></li>
+                                    <li><a href="#">Takip Edilenler</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <h5 class="mb-3 text-muted">Yardım</h5>
+                                <ul class="list-unstyled l-h-2x text-highlight">
+                                    <li><a href="#">Dokümantasyon</a></li>
+                                    <li><a href="#">Değişiklik Günlüğü</a></li>
+                                    <li><a href="#">Güncelleme</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-6 col-md-2 text-md-right">
+                                <h5 class="mb-3 text-muted">Bizi Takip Edin</h5>
+                                <a href="#">Fb</a> <a href="#">Tw</a> <a href="#">Ig</a>
+                            </div>
+                        </div>
+                        <div class="text-center py-5">
+                            <span class="text-muted text-sm">&copy; Telif Hakkı. Bepop - Müzik Web Uygulaması, Tüm hakları saklıdır.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="~/Bepop/libs/jquery/dist/jquery.min.js"></script>
+        <script src="~/Bepop/libs/popper.js/dist/umd/popper.min.js"></script>
+        <script src="~/Bepop/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+        @* <script src="~/Bepop/libs/pjax/pjax.min.js"></script>
+        <script src="~/Bepop/assets/js/ajax.js"></script> *@
+        <script src="~/Bepop/assets/js/lazyload.config.js"></script>
+        <script src="~/Bepop/assets/js/lazyload.js"></script>
+        <script src="~/Bepop/assets/js/plugin.js"></script>
+        <script src="~/Bepop/libs/scrollreveal/dist/scrollreveal.min.js"></script>
+        <script src="~/Bepop/libs/slick-carousel/slick/slick.min.js"></script>
+        <script src="~/Bepop/libs/feather-icons/dist/feather.min.js"></script>
+        <script src="~/Bepop/assets/js/theme.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                icon: 'warning',
+                title: 'Erişim Engellendi!',
+                text: '@Html.Raw(TempData["ErrorMessage"])',
+                confirmButtonText: 'Paketleri İncele',
+                confirmButtonColor: '#a272ff',
+                showCancelButton: true,
+                cancelButtonText: 'Kapat',
+                background: '#1e1e2d', // Temaya uygun koyu arka plan
+                color: '#fff' // Beyaz yazı
+                }).then((result) => {
+                if (result.isConfirmed) {
+                window.location.href = '/Packages/Index';
+                }
+                });
+                });
+            </script>
+        }
+
+    </body>
+</html>

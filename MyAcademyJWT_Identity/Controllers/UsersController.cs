@@ -16,8 +16,12 @@ namespace MyAcademyJWT_Identity.Controllers
         {
             var user = new AppUser
             {
+                FullName = model.FullName,        
                 UserName = model.UserName,
-                Email = model.Email
+                Email = model.Email,
+                ImageUrl = model.ImageUrl,       
+
+                PackageId = model.PackageId > 0 ? model.PackageId : 1
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -33,6 +37,9 @@ namespace MyAcademyJWT_Identity.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto model)
         {
+
+
+
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
 
             if (!result.Succeeded)
