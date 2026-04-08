@@ -1,0 +1,124 @@
+@using MyAcademyJWT.WebUI.Models.Song
+@model List<ResultSongDto>
+@{
+    ViewData["Title"] = "Keşfet";
+}
+
+<div class="page-container p-5">
+    <div class="text-center mb-4 mt-2">
+        <h2 class="text-white font-weight-bold">Yeni Müzikler Keşfet</h2>
+        <p class="text-muted">Senin için derlediğimiz bu devasa listede ufkunuzu genişletin.</p>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <input type="text" id="searchInput" class="form-control bg-dark text-white" style="border: 1px solid #a272ff; border-radius: 20px; padding: 12px 20px;" placeholder="Şarkı veya sanatçı ara...">
+        </div>
+    </div>
+
+    <div class="row list-row" id="songContainer">
+        @foreach (var song in Model)
+        {
+            <div class="col-6 col-md-4 col-lg-3 mb-4 song-item" data-title="@song.Title" data-artist="@song.ArtistName">
+                <div class="list-item r bg-dark border-secondary" style="border-radius: 10px; border-width: 1px; border-style: solid;">
+                    <div class="media">
+                        <a href="javascript:void(0);" onclick="playGlobalSong(@song.Id)" class="media-content" style="background-image:url('@(song.CoverImageUrl ?? "/Bepop/assets/img/b0.jpg")')"></a>
+                        <div class="media-action">
+                            <button onclick="playGlobalSong(@song.Id)" class="btn btn-raised btn-icon btn-rounded text-white" style="background-color: #a272ff;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="list-content text-center p-3">
+                        <a href="javascript:void(0);" onclick="playGlobalSong(@song.Id)" class="list-title title text-white mb-1">@song.Title</a>
+                        <span class="list-subtitle text-muted">@song.ArtistName</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-center mt-4" id="pagination"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 8;
+            let items = $('.song-item');
+            let filteredItems = items;
+            let currentPageGlobal = 1;
+            const maxVisibleButtons = 5;
+
+            function showPage(page) {
+                currentPageGlobal = page;
+                items.hide();
+                let start = (page - 1) * itemsPerPage;
+                let end = start + itemsPerPage;
+                filteredItems.slice(start, end).show();
+                setupPagination(page);
+            }
+
+            function setupPagination(currentPage) {
+                let pageCount = Math.ceil(filteredItems.length / itemsPerPage);
+                let paginationHtml = '';
+            
+                if (pageCount > 1) {
+                    let prevDisabled = (currentPage === 1) ? 'disabled' : '';
+                    paginationHtml += `<button class="btn btn-sm btn-outline-secondary text-white mx-1 page-nav" data-nav="prev" ${prevDisabled}>&laquo; Önceki</button>`;
+
+                    let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+                    let endPage = startPage + maxVisibleButtons - 1;
+
+                    if (endPage > pageCount) {
+                        endPage = pageCount;
+                        startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        let activeClass = (i === currentPage) ? 'btn-primary' : 'btn-outline-secondary text-white';
+                        let inlineStyle = (i === currentPage) ? 'background-color: #a272ff; border:none;' : '';
+                        paginationHtml += `<button class="btn btn-sm ${activeClass} mx-1 page-btn" style="${inlineStyle}" data-page="${i}">${i}</button>`;
+                    }
+
+                    let nextDisabled = (currentPage === pageCount) ? 'disabled' : '';
+                    paginationHtml += `<button class="btn btn-sm btn-outline-secondary text-white mx-1 page-nav" data-nav="next" ${nextDisabled}>Sonraki &raquo;</button>`;
+                }
+                $('#pagination').html(paginationHtml);
+            }
+
+            $('#searchInput').on('keyup', function () {
+                let value = $(this).val().toLowerCase().trim();
+            
+                filteredItems = items.filter(function () {
+                
+                    let title = String($(this).attr('data-title') || '').toLowerCase();
+                    let artist = String($(this).attr('data-artist') || '').toLowerCase();
+                
+                    return title.includes(value) || artist.includes(value);
+                });
+            
+                showPage(1);
+            });
+
+            $(document).on('click', '.page-btn', function () {
+                let page = $(this).data('page');
+                showPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            $(document).on('click', '.page-nav', function () {
+                if ($(this).attr('disabled')) return;
+            
+                let navAction = $(this).data('nav');
+                let newPage = (navAction === 'prev') ? currentPageGlobal - 1 : currentPageGlobal + 1;
+            
+                showPage(newPage);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Başlangıç
+            showPage(1);
+        });
+    </script>
+}

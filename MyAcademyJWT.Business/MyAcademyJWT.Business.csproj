@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.ML" Version="5.0.0" />
+    <PackageReference Include="Microsoft.ML.Recommender" Version="0.23.0" />
     <PackageReference Include="SpotifyAPI.Web" Version="7.4.2" />
   </ItemGroup>
 

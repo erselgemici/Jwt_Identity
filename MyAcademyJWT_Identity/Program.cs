@@ -6,6 +6,7 @@ using MyAcademyJWT.Business.Services;
 using MyAcademyJWT.Business.Services.ArtistServices;
 using MyAcademyJWT.Business.Services.DeezerServices;
 using MyAcademyJWT.Business.Services.JwtServices;
+using MyAcademyJWT.Business.Services.PackageServices;
 using MyAcademyJWT.Business.Services.SongServices;
 using MyAcademyJWT.DataAccess.Context;
 using MyAcademyJWT.Entity.Entities;
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ISongService, SongService>();
 builder.Services.AddScoped<IDeezerService, DeezerService>();
 builder.Services.AddScoped<IArtistService, ArtistService>();
+builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<ISongRecommendationService, SongRecommendationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

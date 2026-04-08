@@ -35,25 +35,24 @@ namespace MyAcademyJWT.Business.Services.SongServices
             return songs;
         }
 
-        // DEĞİŞEN TEK METOT BURASI
         public async Task<SongPlayDto> GetSongForPlayAsync(int songId)
         {
-            // 1. AŞAMA: Veritabanından şarkıyı ve DeezerTrackId'sini anonim obje olarak çekiyoruz
             var songEntity = await _context.Songs
                 .Where(s => s.Id == songId)
                 .Select(s => new
                 {
                     s.Id,
                     s.Title,
-                    s.DeezerTrackId, // Önceki adımlarda Entity'e eklediğimiz yeni kolon
-                    s.RequiredContentLevel
+                    s.DeezerTrackId,
+                    s.RequiredContentLevel,
+                    CoverImageUrl = s.Album != null ? s.Album.CoverImageUrl : null,
+                    ArtistName = s.Album != null && s.Album.Artist != null ? s.Album.Artist.Name : null
                 }).FirstOrDefaultAsync();
 
             if (songEntity == null) return null;
 
             string freshPreviewUrl = "";
 
-            // 2. AŞAMA: Deezer API'den anlık taze mp3 linkini alıyoruz
             using (var httpClient = new HttpClient())
             {
                 try
@@ -71,17 +70,17 @@ namespace MyAcademyJWT.Business.Services.SongServices
                 }
                 catch (Exception)
                 {
-                    // API çökmesi veya internet gitmesi durumları için loglama yapabilirsin
                 }
             }
 
-            // 3. AŞAMA: Taze linki (freshPreviewUrl) DTO'ya verip Controller'a gönderiyoruz
             return new SongPlayDto
             {
                 Id = songEntity.Id,
                 Title = songEntity.Title,
-                AudioUrl = freshPreviewUrl, // Dinamik olarak üretilen link burada!
-                RequiredContentLevel = songEntity.RequiredContentLevel
+                AudioUrl = freshPreviewUrl,
+                RequiredContentLevel = songEntity.RequiredContentLevel,
+                CoverImageUrl = songEntity.CoverImageUrl ?? "/Bepop/assets/img/b0.jpg",
+                ArtistName = songEntity.ArtistName ?? "Bilinmeyen Sanatçı"
             };
         }
 

@@ -19,23 +19,49 @@ namespace MyAcademyJWT.WebUI.Controllers
             var client = _httpClientFactory.CreateClient();
             var token = Request.Cookies["JwtToken"];
 
+            var allSongs = new List<ResultSongDto>();
+            var recentlyPlayed = new List<ResultSongDto>();
+            var recommendations = new List<ResultSongDto>(); 
+
             if (!string.IsNullOrEmpty(token))
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                // Son Dinlenenleri Çek
+                var historyResponse = await client.GetAsync("https://localhost:7074/api/Songs/recently-played");
+                if (historyResponse.IsSuccessStatusCode)
+                {
+                    var historyJson = await historyResponse.Content.ReadAsStringAsync();
+                    recentlyPlayed = JsonSerializer.Deserialize<List<ResultSongDto>>(historyJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                }
+
+                // Yapay Zeka Önerilerini Çek
+                var aiResponse = await client.GetAsync("https://localhost:7074/api/Songs/recommendations");
+                if (aiResponse.IsSuccessStatusCode)
+                {
+                    var aiJson = await aiResponse.Content.ReadAsStringAsync();
+                    recommendations = JsonSerializer.Deserialize<List<ResultSongDto>>(aiJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                }
             }
 
+            // Tüm şarkıları çek
             var responseMessage = await client.GetAsync("https://localhost:7074/api/Songs");
-
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var songs = JsonSerializer.Deserialize<List<ResultSongDto>>(jsonData, options);
-
-                return View(songs);
+                allSongs = JsonSerializer.Deserialize<List<ResultSongDto>>(jsonData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+         
+                allSongs = allSongs?
+                    .GroupBy(s => s.CoverImageUrl)
+                    .Select(g => g.First())
+                    .OrderBy(x => Guid.NewGuid())
+                    .ToList();
             }
 
-            return View(new List<ResultSongDto>());
+            ViewBag.RecentlyPlayed = recentlyPlayed;
+            ViewBag.Recommendations = recommendations;
+
+            return View(allSongs ?? new List<ResultSongDto>());
         }
 
         [HttpGet]
@@ -94,6 +120,49 @@ namespace MyAcademyJWT.WebUI.Controllers
 
             TempData["ErrorMessage"] = "Şarkı yüklenirken bir sorun oluştu.";
             return Redirect(refererUrl);
+        }
+
+        // Javascript'in arka planda şarkıyı çekip oynatması için
+        [HttpGet]
+        public async Task<IActionResult> GetSongForPlayer(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var token = Request.Cookies["JwtToken"];
+
+            if (string.IsNullOrEmpty(token)) return Unauthorized();
+
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // API'ye gidiyoruz (Bu sayede API tarafındaki geçmişe kaydetme 'History' metodu da tetiklenmiş oluyor)
+            var response = await client.GetAsync($"https://localhost:7074/api/Songs/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return Content(json, "application/json"); // Şarkı verilerini JSON olarak JS'e yolla
+            }
+
+            // Eğer paket yetkisi yetmiyorsa (403 Forbidden vb)
+            return StatusCode((int)response.StatusCode);
+        }
+
+        public async Task<IActionResult> Discover()
+        {
+            var client = _httpClientFactory.CreateClient();
+            var allSongs = new List<ResultSongDto>();
+
+            var responseMessage = await client.GetAsync("https://localhost:7074/api/Songs");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var jsonData = await responseMessage.Content.ReadAsStringAsync();
+                var songs = JsonSerializer.Deserialize<List<ResultSongDto>>(jsonData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (songs != null)
+                {
+                    allSongs = songs.OrderBy(x => Guid.NewGuid()).ToList();
+                }
+            }
+            return View(allSongs);
         }
     }
 }

@@ -1,0 +1,76 @@
+@model List<MyAcademyJWT.WebUI.Models.Package.ResultPackageDto>
+
+@{
+    ViewData["Title"] = "Premium Paketler";
+}
+
+<div class="padding sr">
+    <div class="page-hero text-center mb-5">
+        <h1 class="display-4 font-weight-bold text-white mt-4">Sınırları Kaldır, Müziği Hisset.</h1>
+        <p class="text-muted text-lg mt-3">İhtiyacına en uygun paketi seç ve milyonlarca şarkının keyfini kesintisiz çıkar.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var package in Model)
+            {
+                string cardClass = package.ContentLevel == 1 ? "border-warning" : "border-secondary";
+                string badgeColor = package.ContentLevel == 1 ? "bg-warning text-dark" : "bg-primary text-white";
+                string btnClass = package.ContentLevel == 1 ? "btn-warning text-dark" : "btn-outline-primary";
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card bg-dark @cardClass" style="border-width: 2px; border-radius: 15px; transition: transform 0.3s;">
+                        <div class="card-body p-5 text-center">
+                            
+                            @if (package.ContentLevel == 1)
+                            {
+                                <div class="badge badge-pill @badgeColor mb-3 px-3 py-2">En Popüler 👑</div>
+                            }
+                            else
+                            {
+                                <div class="badge badge-pill @badgeColor mb-3 px-3 py-2">Seviye @package.ContentLevel</div>
+                            }
+
+                            <h2 class="text-white font-weight-bold mb-4">@package.Name</h2>
+                            
+                            <ul class="list-unstyled text-left text-muted mb-5" style="line-height: 2.5;">
+                                <li><i data-feather="check" class="text-success mr-2"></i> Reklamsız müzik dinleme</li>
+                                <li><i data-feather="check" class="text-success mr-2"></i> Yüksek ses kalitesi</li>
+                                @if (package.ContentLevel <= 3)
+                                {
+                                    <li><i data-feather="check" class="text-success mr-2"></i> Özel çalma listeleri</li>
+                                }
+                                @if (package.ContentLevel == 1)
+                                {
+                                    <li><i data-feather="check" class="text-warning mr-2"></i> Sınırsız Elite içerik erişimi</li>
+                                    <li><i data-feather="check" class="text-warning mr-2"></i> Çevrimdışı dinleme (Yakında)</li>
+                                }
+                            </ul>
+
+                            <form asp-action="Buy" asp-controller="Package" method="post">
+                                <input type="hidden" name="packageId" value="@package.Id" />
+                                <button type="submit" class="btn @btnClass btn-block btn-rounded py-2 font-weight-bold">
+                                    @package.Name Paketini Seç
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">Şu an gösterilecek bir paket bulunmuyor.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    }
+</style>

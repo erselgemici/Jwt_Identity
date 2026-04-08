@@ -11,6 +11,16 @@
     <link rel="stylesheet" href="~/Bepop/assets/css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="~/Bepop/assets/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="~/Bepop/assets/css/style.css" type="text/css" />
+
+    <style>
+        body.layout-column {
+            background-image: linear-gradient(rgba(15, 15, 20, 0.5), rgba(15, 15, 20, 0.95)), url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed !important;
+        }
+        .page-hero .bg-media { display: none !important; }
+    </style>
 </head>
 
 <body class="layout-column bg-dark">
@@ -29,13 +39,9 @@
             </a>
             <div class="collapse navbar-collapse order-2 order-lg-1" id="navbarCollapse">
                 <ul class="navbar-nav" data-nav>
+                    
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <span class="nav-text">Edin</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link no-ajax">
+                        <a href="javascript:void(0)" class="nav-link no-ajax">
                             <span class="nav-text">Dokümantasyon</span>
                         </a>
                     </li>
@@ -56,8 +62,8 @@
                                 <span>Hoş geldin, <strong>@userFullName</strong></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right w mt-3 animate fadeIn">
-                                <a class="dropdown-item" href="#">Profilim</a>
-                                <a class="dropdown-item" href="#">Ayarlar</a>
+                                <a class="dropdown-item" href="javascript:void(0)">Profilim</a>
+                                <a class="dropdown-item" href="javascript:void(0)">Ayarlar</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item no-ajax" href="/Auth/Logout">Çıkış Yap</a>
                             </div>
@@ -86,13 +92,14 @@
   
             </div>
         </header>
+    
         <div id="main" class="layout-row flex">
             <div id="content" class="flex ">
                 @RenderBody()
             </div>
         </div>
+    
         <footer id="footer" class="page-footer ">
-        
             <div class="padding bg-dark  b-t">
                 <div class="page-container">
                     <div class="py-5 text-inherit text-hover-primary">
@@ -114,48 +121,49 @@
                                     <div class="dropdown mt-5 ml-md-5">
                                         <button class="btn w-sm btn-dark text-align-auto b-a sorting" data-toggle="dropdown">Türkçe</button>
                                         <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item">Türkçe</a>
-                                            <a href="#" class="dropdown-item">English</a>
-                                            <a href="#" class="dropdown-item">Français</a>
-                                            <a href="#" class="dropdown-item">日本语</a>
+                                            <a href="javascript:void(0)" class="dropdown-item">Türkçe</a>
+                                            <a href="javascript:void(0)" class="dropdown-item">English</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        
                             <div class="col-6 col-md-2">
-                                <h5 class="mb-3 text-muted">Sayfalar</h5>
+                                <h5 class="mb-3 text-muted">Keşfet</h5>
                                 <ul class="list-unstyled l-h-2x text-highlight">
-                                    <li><a href="#">Sanatçılar</a></li>
-                                    <li><a href="#">En İyiler</a></li>
-                                    <li><a href="#">Türler</a></li>
-                                    <li><a href="#">Hakkımızda</a></li>
-                                    <li><a href="#">Blog</a></li>
-                                    <li><a href="/Auth/Login">Giriş Yap</a></li>
-                                    <li><a href="/Auth/Register">Kayıt Ol</a></li>
+                                    <li><a href="/">Ana Sayfa</a></li>
+                                    <li><a href="/Artist/Index">Sanatçılar</a></li>
+                                    <li><a href="/Package/Index">Premium Paketler</a></li>
+                                    <li><a href="javascript:void(0)">En İyiler</a></li>
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <li><a href="/Auth/Login">Giriş Yap</a></li>
+                                        <li><a href="/Auth/Register">Kayıt Ol</a></li>
+                                    }
                                 </ul>
                             </div>
+                        
                             <div class="col-6 col-md-2">
                                 <h5 class="mb-3 text-muted">Senin Bepop'un</h5>
                                 <ul class="list-unstyled l-h-2x text-highlight">
-                                    <li><a href="#">Profil</a></li>
-                                    <li><a href="#">Albümler</a></li>
-                                    <li><a href="#">Şarkılar</a></li>
-                                    <li><a href="#">Çalma Listeleri</a></li>
-                                    <li><a href="#">Beğenilenler</a></li>
-                                    <li><a href="#">Takip Edilenler</a></li>
+                                    <li><a href="javascript:void(0)">Profil</a></li>
+                                    <li><a href="javascript:void(0)">Albümler</a></li>
+                                    <li><a href="/">Şarkılar</a></li>
+                                    <li><a href="javascript:void(0)">Çalma Listeleri</a></li>
                                 </ul>
                             </div>
+                        
                             <div class="col-6 col-md-2">
                                 <h5 class="mb-3 text-muted">Yardım</h5>
                                 <ul class="list-unstyled l-h-2x text-highlight">
-                                    <li><a href="#">Dokümantasyon</a></li>
-                                    <li><a href="#">Değişiklik Günlüğü</a></li>
-                                    <li><a href="#">Güncelleme</a></li>
+                                    <li><a href="javascript:void(0)">Dokümantasyon</a></li>
+                                    <li><a href="javascript:void(0)">İletişim</a></li>
                                 </ul>
                             </div>
+                        
                             <div class="col-6 col-md-2 text-md-right">
                                 <h5 class="mb-3 text-muted">Bizi Takip Edin</h5>
-                                <a href="#">Fb</a> <a href="#">Tw</a> <a href="#">Ig</a>
+                                <a href="javascript:void(0)">Facebook</a> <a href="javascript:void(0)">Twitter</a> <a href="javascript:void(0)">Instagram</a>
                             </div>
                         </div>
                         <div class="text-center py-5">
@@ -169,8 +177,6 @@
         <script src="~/Bepop/libs/jquery/dist/jquery.min.js"></script>
         <script src="~/Bepop/libs/popper.js/dist/umd/popper.min.js"></script>
         <script src="~/Bepop/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-        @* <script src="~/Bepop/libs/pjax/pjax.min.js"></script>
-        <script src="~/Bepop/assets/js/ajax.js"></script> *@
         <script src="~/Bepop/assets/js/lazyload.config.js"></script>
         <script src="~/Bepop/assets/js/lazyload.js"></script>
         <script src="~/Bepop/assets/js/plugin.js"></script>
@@ -189,21 +195,130 @@
                 Swal.fire({
                 icon: 'warning',
                 title: 'Erişim Engellendi!',
-                text: '@Html.Raw(TempData["ErrorMessage"])',
+                text: @Html.Raw(Json.Serialize(TempData["ErrorMessage"])),
                 confirmButtonText: 'Paketleri İncele',
                 confirmButtonColor: '#a272ff',
                 showCancelButton: true,
                 cancelButtonText: 'Kapat',
-                background: '#1e1e2d', // Temaya uygun koyu arka plan
-                color: '#fff' // Beyaz yazı
+                background: '#1e1e2d',
+                color: '#fff'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                window.location.href = '/Packages/Index';
+                // DÜZELTİLDİ: /Package/Index
+                window.location.href = '/Package/Index';
                 }
                 });
                 });
             </script>
         }
 
+        <div id="global-player" class="bg-dark border-top border-secondary shadow-lg" style="position: fixed; bottom: 0; left: 0; width: 100%; height: 90px; z-index: 9999; display: none; align-items: center; padding: 0 5%; transition: all 0.3s ease-in-out;">
+        
+            <div style="display: flex; align-items: center; width: 30%; cursor: pointer;" onclick="goToPlayerPage()" title="Tam Sayfa Oynatıcıya Git">
+                <img id="gp-cover" src="" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 15px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" />
+                <div>
+                    <h6 id="gp-title" class="text-white font-weight-bold mb-1" style="font-size: 15px; transition: color 0.2s;">Şarkı Adı</h6>
+                    <span id="gp-artist" class="text-muted" style="font-size: 12px;">Sanatçı</span>
+                </div>
+            </div>
+
+            <div style="width: 40%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+                <audio id="gp-audio" src=""></audio>
+                <button onclick="togglePlay()" class="btn btn-raised btn-icon btn-rounded bg-primary text-white" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                    <svg id="gp-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </button>
+            </div>
+        
+            <div style="width: 30%; text-align: right;">
+                <button onclick="closePlayer()" class="btn btn-sm btn-outline-secondary btn-rounded">Kapat</button>
+            </div>
+        </div>
+
+        <script>
+            const audioEl = document.getElementById('gp-audio');
+            const playIcon = document.getElementById('gp-play-icon');
+            let currentGlobalSongId = 0;
+
+            function goToPlayerPage() {
+            if (currentGlobalSongId > 0) {
+            window.location.href = '/Home/Player?id=' + currentGlobalSongId;
+            }
+            }
+
+            async function playGlobalSong(songId) {
+            document.getElementById('gp-title').innerText = "Yükleniyor...";
+            document.getElementById('gp-artist').innerText = "Lütfen bekleyin";
+            document.getElementById('gp-title').style.color = "#fff";
+            document.getElementById('global-player').style.display = 'flex';
+
+            try {
+            const response = await fetch('/Home/GetSongForPlayer?id=' + songId);
+                
+            if (response.status === 403) {
+            closePlayer();
+            Swal.fire({
+            title: 'Erişim Engellendi!',
+            text: 'Bu şarkıyı dinlemek için paket seviyenizi yükseltmelisiniz!',
+            icon: 'warning',
+            confirmButtonText: 'Paketleri İncele',
+            confirmButtonColor: '#a272ff',
+            showCancelButton: true,
+            cancelButtonText: 'Kapat',
+            background: '#1e1e2d',
+            color: '#fff'
+            }).then((result) => {
+            if (result.isConfirmed) {
+            // DÜZELTİLDİ: /Package/Index
+            window.location.href = '/Package/Index';
+            }
+            });
+            return;
+            }
+
+            if (response.ok) {
+            const song = await response.json();
+            currentGlobalSongId = songId;
+                    
+            const title = song.title || song.Title || 'Bilinmeyen Şarkı';
+            const artist = song.artistName || song.ArtistName || 'Bilinmeyen Sanatçı';
+            const cover = song.coverImageUrl || song.CoverImageUrl || '/Bepop/assets/img/b0.jpg';
+            const audioUrl = song.audioUrl || song.AudioUrl || "https://cdns-preview-e.dzcdn.net/stream/c-e77d23e0c8ed7567a507a6d407a1ddf1-12.mp3";
+
+            document.getElementById('gp-title').innerText = title;
+            document.getElementById('gp-artist').innerText = artist;
+            document.getElementById('gp-cover').src = cover;
+                    
+            document.getElementById('gp-title').onmouseover = function() { this.style.color = '#a272ff'; }
+            document.getElementById('gp-title').onmouseout = function() { this.style.color = '#fff'; }
+                    
+            audioEl.src = audioUrl;
+            await audioEl.play();
+                    
+            playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+            } else {
+            document.getElementById('gp-title').innerText = "Şarkı Bulunamadı!";
+            document.getElementById('gp-artist').innerText = "Hata Kodu: " + response.status;
+            }
+            } catch (error) {
+            document.getElementById('gp-title').innerText = "Bağlantı Hatası!";
+            console.error("Fetch Hatası:", error);
+            }
+            }
+
+            function togglePlay() {
+            if (audioEl.paused) {
+            audioEl.play();
+            playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+            } else {
+            audioEl.pause();
+            playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+            }
+            }
+
+            function closePlayer() {
+            audioEl.pause();
+            document.getElementById('global-player').style.display = 'none';
+            }
+        </script>
     </body>
 </html>

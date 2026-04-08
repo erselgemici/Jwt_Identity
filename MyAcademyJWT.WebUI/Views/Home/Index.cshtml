@@ -1,76 +1,159 @@
 @using MyAcademyJWT.WebUI.Models.Song
 @model List<ResultSongDto>
+
 @{
     ViewData["Title"] = "Ana Sayfa";
 }
 
+<style>
+    body {
+        background-image: linear-gradient(rgba(15, 15, 20, 0.5), rgba(15, 15, 20, 0.95)), url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    .page-hero .bg-media {
+        display: none !important;
+    }
+</style>
+
 <div class="sr">
     <div class="page-hero page-container">
-        <div class="media bg-media">
-            <div class="media-content" style="background-image:url('/Bepop/assets/img/b2.jpg')"></div>
-        </div>
         <div class="p-5 pos-rlt text-center">
             <h1 class="display-3 font-weight-bold text-white mb-5 mx-5">Sanatçılar ve ses platformları için müzik şablonu.</h1>
-            <a href="#" class="btn btn-md gd-primary text-white no-ajax m-2">Yeni Müzikler Keşfet</a>
-
-            <a href="#" class="btn btn-md btn-outline-light m-2">Satın Al</a>
+            <a href="/Home/Discover" class="btn btn-md gd-primary text-white no-ajax m-2">Yeni Müzikler Keşfet</a>
+            <a href="/Package/Index" class="btn btn-md btn-outline-light no-ajax m-2">Satın Al</a>
         </div>
     </div>
+    
     <div class="page-container p-5 pos-rlt">
         <div class="py-5 text-center">
             <h2 class="display-4 font-weight-bold text-white mb-5">Bepop'taki Sanatçılar</h2>
             <p>En popüler sanatçıları bul ve müziklerini Bepop'ta dinle. Onları dinlerken kendi çalma listeni oluştur.</p>
             <div class="py-4">
                 <a href="/Artist/Index" class="btn btn-md btn-outline-primary no-ajax m-2">Sanatçıları Keşfet</a>
-
-                <a href="#" class="btn btn-md btn-outline-primary m-2">Satın Al</a>
+                <a href="/Package/Index" class="btn btn-md btn-outline-primary no-ajax m-2">Satın Al</a>
             </div>
         </div>
     </div>
-	
+
+    @if (ViewBag.RecentlyPlayed != null && ((List<ResultSongDto>)ViewBag.RecentlyPlayed).Any())
+    {
+        <div class="page-container px-5 pb-5">
+            <div class="heading pt-2 pb-3 d-flex">
+                <div>
+                    
+                    <h5 class="text-highlight sr-item text-white">Son Dinlediklerin</h5>
+                </div>
+            </div>
+
+            <div class="row list-row list-index mb-4">
+                @foreach (var historySong in ViewBag.RecentlyPlayed)
+                {
+                    <div class="col-12 col-md-6 col-lg-4 mb-2">
+                        <div class="list-item r bg-dark" style="border-radius: 10px;">
+                            <div class="media">
+                                <a href="javascript:void(0);" onclick="playGlobalSong(@historySong.Id)" class="media-content no-ajax" style="background-image:url('@historySong.CoverImageUrl')"></a>
+                                <div class="media-action">
+                                    <a href="javascript:void(0);" onclick="playGlobalSong(@historySong.Id)" class="btn btn-raised btn-icon btn-rounded bg--white btn-play no-ajax" style="display: flex; align-items: center; justify-content: center;">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#a272ff" stroke="#a272ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="list-content">
+                                <div class="list-body">
+                                    <a href="javascript:void(0);" onclick="playGlobalSong(@historySong.Id)" class="list-title title h-1x text-white no-ajax">@historySong.Title</a>
+                                    <span class="list-subtitle d-block text-muted h-1x subtitle">@historySong.ArtistName</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr class="border-secondary mt-5 mb-4" />
+        </div>
+    }
+
+    @if (ViewBag.Recommendations != null && ((List<ResultSongDto>)ViewBag.Recommendations).Any())
+    {
+        <div class="page-container px-5 pb-5">
+            <div class="heading pt-2 pb-3 d-flex align-items-center">
+                <div>
+                    
+                    <h5 class="text-highlight sr-item text-white">Sizin İçin Önerilenler ✨</h5>
+                </div>
+            </div>
+
+            <div class="row list-row list-index mb-4">
+                @foreach (var aiSong in ViewBag.Recommendations)
+                {
+                    <div class="col-12 col-md-6 col-lg-4 mb-2">
+                        <div class="list-item r bg-dark border-primary" style="border-radius: 10px; border-width: 1px; border-style: solid;">
+                            <div class="media">
+                                <a href="javascript:void(0);" onclick="playGlobalSong(@aiSong.Id)" class="media-content no-ajax" style="background-image:url('@aiSong.CoverImageUrl')"></a>
+                                <div class="media-action">
+                                    <a href="javascript:void(0);" onclick="playGlobalSong(@aiSong.Id)" class="btn btn-raised btn-icon btn-rounded bg-primary text-white btn-play no-ajax" style="display: flex; align-items: center; justify-content: center;">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="list-content">
+                                <div class="list-body">
+                                    <a href="javascript:void(0);" onclick="playGlobalSong(@aiSong.Id)" class="list-title title h-1x text-white no-ajax">@aiSong.Title</a>
+                                    <span class="list-subtitle d-block text-muted h-1x subtitle">@aiSong.ArtistName</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr class="border-secondary mt-5 mb-4" />
+        </div>
+    }
+
     <div class="row no-gutters flex align-items-end">
         <div class="col-2">
             <div class="row no-gutters align-items-end">
-                <div class="col-2"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(0)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(0)?.CoverImageUrl ?? "/Bepop/assets/img/b0.jpg")');"></a></div></div>
+                <div class="col-2"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(0)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(0)?.CoverImageUrl ?? "/Bepop/assets/img/b0.jpg")');"></a></div></div>
                 <div class="col-10"></div>
-                <div class="col-8"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(1)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(1)?.CoverImageUrl ?? "/Bepop/assets/img/b1.jpg")');"></a></div></div>
-                <div class="col-4"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(2)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(2)?.CoverImageUrl ?? "/Bepop/assets/img/b2.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(3)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(3)?.CoverImageUrl ?? "/Bepop/assets/img/b3.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(4)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(4)?.CoverImageUrl ?? "/Bepop/assets/img/b4.jpg")');"></a></div></div>
-                <div class="col-12"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(5)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(5)?.CoverImageUrl ?? "/Bepop/assets/img/b5.jpg")');"></a></div></div>
+                <div class="col-8"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(1)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(1)?.CoverImageUrl ?? "/Bepop/assets/img/b1.jpg")');"></a></div></div>
+                <div class="col-4"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(2)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(2)?.CoverImageUrl ?? "/Bepop/assets/img/b2.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(3)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(3)?.CoverImageUrl ?? "/Bepop/assets/img/b3.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(4)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(4)?.CoverImageUrl ?? "/Bepop/assets/img/b4.jpg")');"></a></div></div>
+                <div class="col-12"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(5)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(5)?.CoverImageUrl ?? "/Bepop/assets/img/b5.jpg")');"></a></div></div>
             </div>
         </div>
         <div class="col-3">
             <div class="row no-gutters align-items-end">
-                <div class="col-3"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(6)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(6)?.CoverImageUrl ?? "/Bepop/assets/img/b6.jpg")');"></a></div></div>
-                <div class="col-2"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(7)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(7)?.CoverImageUrl ?? "/Bepop/assets/img/b7.jpg")');"></a></div></div>
+                <div class="col-3"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(6)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(6)?.CoverImageUrl ?? "/Bepop/assets/img/b6.jpg")');"></a></div></div>
+                <div class="col-2"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(7)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(7)?.CoverImageUrl ?? "/Bepop/assets/img/b7.jpg")');"></a></div></div>
                 <div class="col-7"></div>
-                <div class="col-12"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(8)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(8)?.CoverImageUrl ?? "/Bepop/assets/img/b8.jpg")');"></a></div></div>
+                <div class="col-12"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(8)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(8)?.CoverImageUrl ?? "/Bepop/assets/img/b8.jpg")');"></a></div></div>
             </div>
         </div>
         <div class="col-3">
             <div class="row no-gutters align-items-end">
-                <div class="col-7"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(9)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(9)?.CoverImageUrl ?? "/Bepop/assets/img/b9.jpg")');"></a></div></div>
-                <div class="col-5"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(10)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(10)?.CoverImageUrl ?? "/Bepop/assets/img/b10.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(11)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(11)?.CoverImageUrl ?? "/Bepop/assets/img/b11.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(12)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(12)?.CoverImageUrl ?? "/Bepop/assets/img/b12.jpg")');"></a></div></div>
+                <div class="col-7"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(9)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(9)?.CoverImageUrl ?? "/Bepop/assets/img/b9.jpg")');"></a></div></div>
+                <div class="col-5"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(10)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(10)?.CoverImageUrl ?? "/Bepop/assets/img/b10.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(11)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(11)?.CoverImageUrl ?? "/Bepop/assets/img/b11.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(12)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(12)?.CoverImageUrl ?? "/Bepop/assets/img/b12.jpg")');"></a></div></div>
             </div>
         </div>
         <div class="col-2">
             <div class="row no-gutters align-items-end">
-                <div class="col-5"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(13)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(13)?.CoverImageUrl ?? "/Bepop/assets/img/b13.jpg")');"></a></div></div>
-                <div class="col-7"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(14)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(14)?.CoverImageUrl ?? "/Bepop/assets/img/b14.jpg")');"></a></div></div>
-                <div class="col-12"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(15)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(15)?.CoverImageUrl ?? "/Bepop/assets/img/b15.jpg")');"></a></div></div>
+                <div class="col-5"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(13)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(13)?.CoverImageUrl ?? "/Bepop/assets/img/b13.jpg")');"></a></div></div>
+                <div class="col-7"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(14)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(14)?.CoverImageUrl ?? "/Bepop/assets/img/b14.jpg")');"></a></div></div>
+                <div class="col-12"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(15)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(15)?.CoverImageUrl ?? "/Bepop/assets/img/b15.jpg")');"></a></div></div>
             </div>
         </div>
         <div class="col-2">
             <div class="row no-gutters align-items-end">
                 <div class="col-2"></div>
-                <div class="col-4"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(16)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(16)?.CoverImageUrl ?? "/Bepop/assets/img/b18.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(17)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(17)?.CoverImageUrl ?? "/Bepop/assets/img/b17.jpg")');"></a></div></div>
-                <div class="col-12"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(18)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(18)?.CoverImageUrl ?? "/Bepop/assets/img/b20.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(19)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(19)?.CoverImageUrl ?? "/Bepop/assets/img/b17.jpg")');"></a></div></div>
-                <div class="col-6"><div class="media"><a href="/Home/Player?id=@(Model?.ElementAtOrDefault(20)?.Id ?? 0)" class="media-content" style="background-image: url('@(Model?.ElementAtOrDefault(20)?.CoverImageUrl ?? "/Bepop/assets/img/b19.jpg")');"></a></div></div>
+                <div class="col-4"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(16)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(16)?.CoverImageUrl ?? "/Bepop/assets/img/b18.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(17)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(17)?.CoverImageUrl ?? "/Bepop/assets/img/b17.jpg")');"></a></div></div>
+                <div class="col-12"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(18)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(18)?.CoverImageUrl ?? "/Bepop/assets/img/b20.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(19)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(19)?.CoverImageUrl ?? "/Bepop/assets/img/b17.jpg")');"></a></div></div>
+                <div class="col-6"><div class="media"><a href="javascript:void(0);" onclick="playGlobalSong(@(Model?.ElementAtOrDefault(20)?.Id ?? 0))" class="media-content no-ajax" style="background-image: url('@(Model?.ElementAtOrDefault(20)?.CoverImageUrl ?? "/Bepop/assets/img/b19.jpg")');"></a></div></div>
             </div>
         </div>
     </div>

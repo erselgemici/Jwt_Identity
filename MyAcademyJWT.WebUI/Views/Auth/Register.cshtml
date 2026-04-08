@@ -6,16 +6,13 @@
 <head>
     <meta charset="utf-8" />
     <title>Kayıt Ol | Bepop - Müzik Web Uygulaması</title>
-    <meta name="description" content="Responsive, Bootstrap, BS4" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link rel="stylesheet" href="~/Bepop/libs/slick-carousel/slick/slick.css" type="text/css" />
     <link rel="stylesheet" href="~/Bepop/libs/slick-carousel/slick/slick-theme.css" type="text/css" />
     <link rel="stylesheet" href="~/Bepop/assets/css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="~/Bepop/assets/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="~/Bepop/assets/css/style.css" type="text/css" />
-    
     <style>
-        /* Paket Seçim Grid'i için Özel CSS */
         .package-selector input[type="radio"]:checked + .card {
             border-color: #a272ff !important;
             background-color: rgba(162, 114, 255, 0.1) !important;
@@ -24,129 +21,134 @@
         .package-selector .card {
             transition: all 0.2s ease-in-out;
             background-color: #1a1b1e;
+            cursor: pointer;
         }
         .package-selector .card:hover {
             border-color: #a272ff !important;
         }
+        /* Sağdaki form alanında scroll çubuğunu gizle ama kaydırılabilir olsun */
+        .form-container::-webkit-scrollbar { width: 6px; }
+        .form-container::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
-<body class="layout-row bg-dark">
-    <div class="d-flex flex-column flex">
-        <div class="row no-gutters h-100">
-            <div class="col-md-4 bg-dark bg-img" style="background-image:url('/Bepop/assets/img/b7.jpg')">
-                <div class="p-4 p-md-5 d-flex flex-column h-100" style="background: rgba(0,0,0,0.7);">
-                    <h4 class="mb-3 text-primary font-weight-bold" style="color: #a272ff !important;">Bepop</h4>
-                    <div class="mt-auto mb-5">
-                        <h1 class="display-4 font-weight-bold text-white mb-3">Müziğin Geleceğine Katıl.</h1>
-                        <p class="text-fade lead">Kendi profilini oluştur, paketini seç ve topluluğun bir parçası ol.</p>
-                    </div>
-                </div>
+<body class="layout-row bg-dark" style="height: 100vh; margin: 0; overflow: hidden;">
+    <div class="row no-gutters w-100 h-100">
+        
+        <div class="col-md-4 d-none d-md-flex flex-column justify-content-between p-5" style="background-image: linear-gradient(rgba(15,15,20,0.5), rgba(15,15,20,0.9)), url('https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; border-right: 1px solid #333;">
+            <div>
+                <h4 class="mb-3 font-weight-bold" style="color: #a272ff !important;">Bepop</h4>
             </div>
-            
-            <div class="col-md-8 d-flex align-items-center justify-content-center" id="content-body">
-                <div class="p-4 p-md-5 w-100" style="max-width: 700px;">
-                    <div class="mb-5">
-                        <h3 class="font-weight-bold text-white mb-2">Kayıt Ol</h3>
-                        <p class="text-muted">Bilgilerini gir ve sana en uygun paketi seç.</p>
+            <div class="mb-5 pb-5">
+                <h1 class="display-4 font-weight-bold text-white mb-3">Müziğin Geleceğine Katıl.</h1>
+                <p class="text-fade lead" style="color: #aaa;">Kendi profilini oluştur, paketini seç ve topluluğun bir parçası ol.</p>
+            </div>
+        </div>
+        
+        <div class="col-12 col-md-8 d-flex align-items-center justify-content-center bg-dark form-container" style="overflow-y: auto; height: 100vh;">
+            <div class="p-4 py-5 w-100" style="max-width: 650px;">
+                <div class="mb-4 mt-2">
+                    <h3 class="font-weight-bold text-white mb-2">Kayıt Ol</h3>
+                    <p class="text-muted">Bilgilerini gir ve sana en uygun paketi seç.</p>
+                </div>
+
+                <form role="form" method="post" action="/Auth/Register">
+                    
+                    <div class="row form-group mb-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label class="text-muted text-sm">Ad Soyad</label>
+                            <input type="text" name="FullName" class="form-control bg-dark border-secondary text-white" placeholder="Ad Soyad" required style="border-radius: 8px;">
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label class="text-muted text-sm">Kullanıcı Adı</label>
+                            <input type="text" name="Username" class="form-control bg-dark border-secondary text-white" placeholder="Kullanıcı Adı" required style="border-radius: 8px;">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted text-sm">Resim Url</label>
+                            <input type="text" name="ImageUrl" class="form-control bg-dark border-secondary text-white" placeholder="Resim linki" style="border-radius: 8px;">
+                        </div>
                     </div>
 
-                    <form role="form" method="post" action="/Auth/Register">
-                        
-                        <div class="row form-group mb-4">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <label class="text-muted text-sm">Ad Soyad</label>
-                                <input type="text" name="FullName" class="form-control bg-dark border-secondary text-white" placeholder="Ad Soyad" required style="border-radius: 8px;">
-                            </div>
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <label class="text-muted text-sm">Kullanıcı Adı</label>
-                                <input type="text" name="Username" class="form-control bg-dark border-secondary text-white" placeholder="Kullanıcı Adı" required style="border-radius: 8px;">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="text-muted text-sm">Resim Url</label>
-                                <input type="text" name="ImageUrl" class="form-control bg-dark border-secondary text-white" placeholder="Resim linki" style="border-radius: 8px;">
+                    <div class="form-group mb-4">
+                        <label class="text-muted text-sm">E-posta</label>
+                        <input type="email" name="Email" class="form-control bg-dark border-secondary text-white" placeholder="E-posta adresiniz" required style="border-radius: 8px;">
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="text-muted text-sm">Şifre</label>
+                        <div class="input-group">
+                            <input type="password" name="Password" id="registerPassword" class="form-control bg-dark border-secondary text-white" placeholder="Şifreniz" required style="border-radius: 8px 0 0 8px; border-right: none;">
+                            <div class="input-group-append">
+                                <span class="input-group-text border-secondary bg-dark cursor-pointer" onclick="togglePassword('registerPassword', 'registerEyeIcon')" style="border-radius: 0 8px 8px 0; border-left: none;">
+                                    <i data-feather="eye" id="registerEyeIcon" class="text-muted"></i>
+                                </span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-group mb-4">
-                            <label class="text-muted text-sm">E-posta</label>
-                            <input type="email" name="Email" class="form-control bg-dark border-secondary text-white" placeholder="E-posta adresiniz" required style="border-radius: 8px;">
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label class="text-muted text-sm">Şifre</label>
-                            <div class="input-group">
-                                <input type="password" name="Password" id="registerPassword" class="form-control bg-dark border-secondary text-white" placeholder="Şifreniz" required style="border-radius: 8px 0 0 8px; border-right: none;">
-                                <div class="input-group-append">
-                                    <span class="input-group-text border-secondary bg-dark cursor-pointer" onclick="togglePassword('registerPassword', 'registerEyeIcon')" style="border-radius: 0 8px 8px 0; border-left: none;">
-                                        <i data-feather="eye" id="registerEyeIcon" class="text-muted"></i>
-                                    </span>
-                                </div>
+                    <div class="form-group mb-5">
+                        <label class="text-muted text-sm mb-3 d-block">Bir Paket Seçin</label>
+                        <div class="row package-selector">
+                            <div class="col-6 col-sm-4 mb-3">
+                                <label class="w-100 mb-0">
+                                    <input type="radio" name="PackageId" value="1" class="d-none" required>
+                                    <div class="card border-secondary text-center py-3 text-muted rounded">Free</div>
+                                </label>
+                            </div>
+                            <div class="col-6 col-sm-4 mb-3">
+                                <label class="w-100 mb-0">
+                                    <input type="radio" name="PackageId" value="2" class="d-none">
+                                    <div class="card border-secondary text-center py-3 text-muted rounded">Basic</div>
+                                </label>
+                            </div>
+                            <div class="col-6 col-sm-4 mb-3">
+                                <label class="w-100 mb-0">
+                                    <input type="radio" name="PackageId" value="3" class="d-none">
+                                    <div class="card border-secondary text-center py-3 text-muted rounded">Standard</div>
+                                </label>
+                            </div>
+                            <div class="col-6 col-sm-4 mb-3">
+                                <label class="w-100 mb-0">
+                                    <input type="radio" name="PackageId" value="4" class="d-none">
+                                    <div class="card border-secondary text-center py-3 text-muted rounded">Gold</div>
+                                </label>
+                            </div>
+                            <div class="col-6 col-sm-4 mb-3">
+                                <label class="w-100 mb-0">
+                                    <input type="radio" name="PackageId" value="5" class="d-none">
+                                    <div class="card border-secondary text-center py-3 text-muted rounded">Premium</div>
+                                </label>
+                            </div>
+                            <div class="col-6 col-sm-4 mb-3">
+                                <label class="w-100 mb-0">
+                                    <input type="radio" name="PackageId" value="6" class="d-none">
+                                    <div class="card border-secondary text-center py-3 text-muted rounded">Elite</div>
+                                </label>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-group mb-5">
-                            <label class="text-muted text-sm mb-3 d-block">Bir Paket Seçin</label>
-                            <div class="row package-selector">
-                                <div class="col-4 mb-3">
-                                    <label class="w-100 mb-0 cursor-pointer">
-                                        <input type="radio" name="PackageId" value="1" class="d-none" required>
-                                        <div class="card border-secondary text-center py-3 text-muted rounded">Free</div>
-                                    </label>
-                                </div>
-                                <div class="col-4 mb-3">
-                                    <label class="w-100 mb-0 cursor-pointer">
-                                        <input type="radio" name="PackageId" value="2" class="d-none">
-                                        <div class="card border-secondary text-center py-3 text-muted rounded">Basic</div>
-                                    </label>
-                                </div>
-                                <div class="col-4 mb-3">
-                                    <label class="w-100 mb-0 cursor-pointer">
-                                        <input type="radio" name="PackageId" value="3" class="d-none">
-                                        <div class="card border-secondary text-center py-3 text-muted rounded">Standard</div>
-                                    </label>
-                                </div>
-                                <div class="col-4 mb-3">
-                                    <label class="w-100 mb-0 cursor-pointer">
-                                        <input type="radio" name="PackageId" value="4" class="d-none">
-                                        <div class="card border-secondary text-center py-3 text-muted rounded">Gold</div>
-                                    </label>
-                                </div>
-                                <div class="col-4 mb-3">
-                                    <label class="w-100 mb-0 cursor-pointer">
-                                        <input type="radio" name="PackageId" value="5" class="d-none">
-                                        <div class="card border-secondary text-center py-3 text-muted rounded">Premium</div>
-                                    </label>
-                                </div>
-                                <div class="col-4 mb-3">
-                                    <label class="w-100 mb-0 cursor-pointer">
-                                        <input type="radio" name="PackageId" value="6" class="d-none">
-                                        <div class="card border-secondary text-center py-3 text-muted rounded">Elite</div>
-                                    </label>
-                                </div>
-                            </div>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger" style="border-radius: 8px; padding: 10px; margin-bottom: 20px;">
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger list-unstyled m-0" })
                         </div>
+                    }
 
-                        @if (!ViewData.ModelState.IsValid)
-                        {
-                            <div class="alert alert-danger" style="border-radius: 8px; padding: 10px; margin-bottom: 20px;">
-                                @Html.ValidationSummary(false, "", new { @class = "text-danger list-unstyled m-0" })
-                            </div>
-                        }
-
-                        <button type="submit" class="btn btn-primary btn-block mb-4" style="background-color: #a272ff; border: none; border-radius: 8px; padding: 12px;">Kayıt İşlemini Tamamla</button>
-                        
-                        <div class="text-center">
-                            <span class="text-muted">Zaten üye misiniz?</span>
-                            <a href="/Auth/Login" class="text-primary font-weight-bold" style="color: #a272ff !important;">Giriş Yap</a>
-                        </div>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-primary btn-block mb-4 text-white font-weight-bold" style="background-color: #a272ff; border: none; border-radius: 8px; padding: 12px;">Kayıt İşlemini Tamamla</button>
+                    
+                    <div class="text-center">
+                        <span class="text-muted">Zaten üye misiniz?</span>
+                        <a href="/Auth/Login" class="font-weight-bold" style="color: #a272ff !important;">Giriş Yap</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/" class="text-muted" style="font-size: 13px;">< Ana Sayfaya Dön</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script src="~/Bepop/libs/jquery/dist/jquery.min.js"></script>
-    <script src="~/Bepop/libs/popper.js/dist/umd/popper.min.js"></script>
     <script src="~/Bepop/libs/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/Bepop/libs/feather-icons/dist/feather.min.js"></script>
     <script>

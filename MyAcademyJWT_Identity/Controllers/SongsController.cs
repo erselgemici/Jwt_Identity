@@ -13,14 +13,17 @@ namespace MyAcademyJWT_Identity.Controllers
     {
         private readonly ISongService _songService;
         private readonly IDeezerService _deezerService;
+        private readonly ISongRecommendationService _recommendationService;
 
-        public SongsController(ISongService songService, IDeezerService deezerService)
+        public SongsController(ISongService songService, IDeezerService deezerService, ISongRecommendationService recommendationService)
         {
             _songService = songService;
             _deezerService = deezerService;
+            _recommendationService = recommendationService;
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllSongs()
         {
             var songs = await _songService.GetAllSongsAsync();
@@ -98,6 +101,45 @@ namespace MyAcademyJWT_Identity.Controllers
         {
             var result = await _deezerService.SeedTracksFromDeezerAsync(query);
             return Ok(result);
+        }
+
+        [HttpGet("recommendations")]
+        [Authorize] 
+        public async Task<IActionResult> GetRecommendations()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var recommendedSongs = await _recommendationService.GetRecommendationsForUserAsync(userId, 6);
+            return Ok(recommendedSongs);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize] 
+        public async Task<IActionResult> GetSongForPlayer(int id)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var song = await _songService.GetSongForPlayAsync(id);
+
+            if (song == null)
+            {
+                return NotFound("Şarkı bulunamadı.");
+            }
+
+            await _songService.RecordSongPlayAsync(userId, id);
+
+            // Yapay Zekanın hafızasını sıfırla. Böylece ana sayfaya döndüğünde yeni zevklerine göre öneri yapacak.
+            SongRecommendationService.ForceRetrain();
+
+            return Ok(song);
         }
     }
 }
